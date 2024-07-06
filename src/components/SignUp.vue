@@ -487,7 +487,7 @@ a:hover:after {
   background: #111;
   left: 0;
   top: 0;
-  border-radius: 10px;
+  border-radius: 4px;
 }
 
 @keyframes glowing {
