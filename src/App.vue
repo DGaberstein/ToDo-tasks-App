@@ -45,23 +45,47 @@ const router = useRouter();
 const userStore = useUserStore();
 // Destructure the variable 'user' and 'isLoggedIn' out of the store, keeping their reactivity using storeToRefs
 const { user, isLoggedIn } = storeToRefs(userStore);
+// Reactive variable to hide/show elements based on user login status
+const isUserloggedIn = ref(false);
+
+
+// Using the onMounted lifecycle hook to perform actions when the component is mounted
+// onMounted(() => {
+//   try {
+//     // Fetch the user data from the store on mount
+//     userStore.fetchUser();
+//   } catch (error) {
+//     console.error("Error fetching user data:", error.message);
+//   }
+// });
 
 // Using the onMounted lifecycle hook to perform actions when the component is mounted
 onMounted(() => {
+  console.log("hello calling function");
   try {
-    // Fetch the user data from the store on mount
+    // Fetch the user data from the store
     userStore.fetchUser();
+    // Check if the user is stored in localStorage
+    if (!user.value) {
+      // If no user is found, redirect to login page
+      router.push({ path: "/auth/login" });
+    } else {
+      // If user is found, update the reactive variable and redirect to home
+      isUserloggedIn.value = true;
+      router.push({ path: "/" });
+    }
   } catch (error) {
-    console.error("Error fetching user data:", error.message);
+    console.log(error);
   }
 });
+
 
 /**
  * Signs out the user and redirects to the login page.
  */
-const handleSignOut = async () => {
+const handleSignOut =  () => {
   try {
-    await userStore.signOut();
+    userStore.signOut();
     router.push({ path: "/auth/login" });
   } catch (error) {
     console.error("Error signing out:", error.message);
