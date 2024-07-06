@@ -46,12 +46,7 @@
             />
           </label>
           <!-- Sign Up Button -->
-          <button type="submit" class="btn btn--svg">
-            <span class="btn--svg__label">Sign Up</span>
-            <svg width="190" height="42">
-              <rect x="1" y="1" rx="21" ry="21" width="188" height="40" style="fill:none;stroke:black;"></rect>
-            </svg>
-          </button>
+          <button type="submit" class="glow-on-hover">Sign Up</button>
         </div>
       </form>
       <!-- Display error message if any -->
@@ -63,26 +58,7 @@
         <!-- Redirect to login page using PersonalRouter -->
         <PersonalRouter :route="goToRoute" :buttonText="buttonText" class="sign-up-link" />
       </p>
-          <!-- New section for SVG button and attribution -->
-    <div class="trailer">
-      <p class="teasing-1 c-white trailer">
-      </p>
-      <a href="#project" class="btn btn--svg js-animated-button">
-        <span class="btn--svg__label">Hover me !</span>
-        <svg width="190" x="0px" y="0px" viewBox="0 0 60 60" enable-background="new 0 0 60 60" class="btn--svg__circle">
-          <circle fill="#FFFFFF" cx="30" cy="30" r="28.7" class="js-discover-circle"></circle>
-        </svg>
-        <svg x="0px" y="0px" preserveAspectRatio="none" viewBox="2 29.3 56.9 13.4" enable-background="new 2 29.3 56.9 13.4" width="190" class="btn--svg__border">
-          <g id="Calque_2" class="btn--svg__border--left js-discover-left-border">
-            <path fill="none" stroke="#FFF" stroke-width="0.5" stroke-miterlimit="1" d="M30.4,41.9H9c0,0-6.2-0.3-6.2-5.9S9,30.1,9,30.1h21.4"></path>
-          </g>
-          <g id="Calque_3" class="btn--svg__border--right js-discover-right-border">
-            <path fill="none" stroke="#FFF" stroke-width="0.5" stroke-miterlimit="1" d="M30.4,41.9h21.5c0,0,6.1-0.4,6.1-5.9s-6-5.9-6-5.9H30.4"></path>
-          </g>
-        </svg>
-      </a>
     </div>
-  </div>
   </div>
 </template>
 
@@ -456,4 +432,68 @@ a:hover:after {
   font-weight: 400;
   text-rendering: optimizeLegibility;
 }
+
+/* Existing styles for SignUp.vue component */
+
+/* Add the new button style */
+.glow-on-hover {
+  width: 220px;
+  height: 50px;
+  border: none;
+  outline: none;
+  color: #fff;
+  background: #111;
+  cursor: pointer;
+  position: relative;
+  z-index: 0;
+  border-radius: 10px;
+}
+
+.glow-on-hover:before {
+  content: '';
+  background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(5px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glowing 20s linear infinite;
+  opacity: 0;
+  transition: opacity .3s ease-in-out;
+  border-radius: 10px;
+}
+
+.glow-on-hover:active {
+  color: #000;
+}
+
+.glow-on-hover:active:after {
+  background: transparent;
+}
+
+.glow-on-hover:hover:before {
+  opacity: 1;
+}
+
+.glow-on-hover:after {
+  z-index: -1;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #111;
+  left: 0;
+  top: 0;
+  border-radius: 10px;
+}
+
+@keyframes glowing {
+  0% { background-position: 0 0; }
+  50% { background-position: 400% 0; }
+  100% { background-position: 0 0; }
+}
+
 </style>
