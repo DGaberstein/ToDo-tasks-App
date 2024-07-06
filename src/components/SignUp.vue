@@ -495,5 +495,4 @@ a:hover:after {
   50% { background-position: 400% 0; }
   100% { background-position: 0 0; }
 }
-
 </style>
