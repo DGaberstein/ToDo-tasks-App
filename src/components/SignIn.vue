@@ -90,11 +90,11 @@ let signIn = async () => {
 </script>
 
 <style scoped>
-/* Scoped styles for SignIn.vue component */
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   min-height: 100vh;
   background-color: #121212;
   color: #f0f0f0;
@@ -139,6 +139,7 @@ let signIn = async () => {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   max-width: 400px;
   width: 100%;
+  margin: 0 auto;
 }
 
 .header-title {
@@ -173,11 +174,11 @@ button {
   border: none;
   outline: none;
   color: #fff;
-  background: #28a745; /* Changed background color */
+  background: #28a745;
   cursor: pointer;
   position: relative;
   z-index: 0;
-  border-radius: 4px; /* Changed border-radius to 4px */
+  border-radius: 4px;
   padding: 0.75rem;
 }
 
@@ -216,7 +217,7 @@ button:hover {
   animation: glowing 20s linear infinite;
   opacity: 0;
   transition: opacity .3s ease-in-out;
-  border-radius: 4px; /* Adjusted border-radius to 4px */
+  border-radius: 4px;
 }
 
 .glow-on-hover:active {
@@ -240,7 +241,7 @@ button:hover {
   background: #111;
   left: 0;
   top: 0;
-  border-radius: 4px; /* Adjusted border-radius to 4px */
+  border-radius: 4px;
 }
 
 @keyframes glowing {
