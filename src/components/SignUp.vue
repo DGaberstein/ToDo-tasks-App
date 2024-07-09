@@ -26,24 +26,33 @@
           </label>
           <!-- Password Input Field -->
           <label>Password
-            <input
-              :type="passwordVisible ? 'text' : 'password'"
-              placeholder="**********"
-              id="password"
-              v-model="formState.password"
-              required
-            />
-            <button type="button" @click="togglePasswordVisibility">Toggle Password</button>
+            <div class="password-wrapper">
+              <input
+                :type="passwordVisible ? 'text' : 'password'"
+                placeholder="**********"
+                id="password"
+                v-model="formState.password"
+                required
+              />
+              <span class="toggle-password" @click="togglePasswordVisibility">
+                <i :class="passwordVisible ? 'icon-eye' : 'icon-eye-off'"></i>
+              </span>
+            </div>
           </label>
           <!-- Confirm Password Input Field -->
           <label>Confirm password
-            <input
-              :type="passwordVisible ? 'text' : 'password'"
-              placeholder="**********"
-              id="confirmPassword"
-              v-model="formState.confirmPassword"
-              required
-            />
+            <div class="password-wrapper">
+              <input
+                :type="passwordVisible ? 'text' : 'password'"
+                placeholder="**********"
+                id="confirmPassword"
+                v-model="formState.confirmPassword"
+                required
+              />
+              <span class="toggle-password" @click="togglePasswordVisibility">
+                <i :class="passwordVisible ? 'icon-eye' : 'icon-eye-off'"></i>
+              </span>
+            </div>
           </label>
           <!-- Sign Up Button -->
           <button type="submit" class="glow-on-hover">Sign Up</button>
@@ -96,14 +105,14 @@ const passwordVisible = ref(false); // Reactive reference for password visibilit
 // ------------------------------------------------------------------------
 
 /**
- * Toggles the visibility of the password field.
+ * Toggles the visibility of the password fields.
  */
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
 };
 
 /*
-  The togglePasswordVisibility function is used to toggle the visibility of the password field.
+  The togglePasswordVisibility function is used to toggle the visibility of the password fields.
   - It flips the boolean value of passwordVisible to switch between text and password input types.
 */
 
@@ -193,7 +202,6 @@ const signUp = () => {
 </script>
 
 <style scoped>
-/* Existing styles for SignUp.vue component */
 .container {
   display: flex;
   flex-direction: column;
@@ -262,10 +270,12 @@ const signUp = () => {
 }
 
 label {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.password-wrapper {
+  position: relative;
 }
 
 input {
@@ -275,6 +285,27 @@ input {
   border-radius: 4px;
 }
 
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: black;
+}
+
+.icon-eye::before {
+  content: '\f06e';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
+
+.icon-eye-off::before {
+  content: '\f070';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
+
 button {
   padding: 0.75rem;
   background-color: #28A745;
@@ -282,6 +313,7 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
@@ -433,9 +465,6 @@ a:hover:after {
   text-rendering: optimizeLegibility;
 }
 
-/* Existing styles for SignUp.vue component */
-
-/* Add the new button style */
 .glow-on-hover {
   width: 220px;
   height: 50px;
