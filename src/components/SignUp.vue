@@ -1,72 +1,74 @@
 <template>
-  <div class="container">
-    <div class="header">
-      <h1 class="title heading-2">The ToDo App</h1>
-      <nav>
-        <ul class="nav-links">
-          <RouterLink to="/auth/login" class="c-white">Login</RouterLink>
-          <RouterLink to="/auth/register" class="c-white">Register</RouterLink>
-        </ul>
-      </nav>
-    </div>
-    <div class="register-container">
-      <h3 class="header-title heading-2">Register to ToDo tasks App</h3>
-      <p class="header-subtitle teasing-1">Start organizing your tasks!</p>
-      <form @submit.prevent="signUp">
-        <div class="form">
-          <!-- Email Input Field -->
-          <label>Email
-            <input
-              type="email"
-              placeholder="example@gmail.com"
-              id="email"
-              v-model="formState.email"
-              required
-            />
-          </label>
-          <!-- Password Input Field -->
-          <label>Password
-            <div class="password-wrapper">
+  <div class="main-container">
+    <div class="container">
+      <div class="header">
+        <h1 class="title heading-2">The ToDo App</h1>
+        <nav>
+          <ul class="nav-links">
+            <RouterLink to="/auth/login" class="c-white">Login</RouterLink>
+            <RouterLink to="/auth/register" class="c-white">Register</RouterLink>
+          </ul>
+        </nav>
+      </div>
+      <div class="register-container">
+        <h3 class="header-title heading-2">Register to ToDo tasks App</h3>
+        <p class="header-subtitle teasing-1">Start organizing your tasks!</p>
+        <form @submit.prevent="signUp">
+          <div class="form">
+            <!-- Email Input Field -->
+            <label class="label">Email
               <input
-                :type="passwordVisible ? 'text' : 'password'"
-                placeholder="**********"
-                id="password"
-                v-model="formState.password"
+                type="email"
+                placeholder="example@gmail.com"
+                id="email"
+                v-model="formState.email"
                 required
               />
-              <span class="toggle-password" @click="togglePasswordVisibility">
-                <i :class="passwordVisible ? 'icon-eye' : 'icon-eye-off'"></i>
-              </span>
-            </div>
-          </label>
-          <!-- Confirm Password Input Field -->
-          <label>Confirm password
-            <div class="password-wrapper">
-              <input
-                :type="passwordVisible ? 'text' : 'password'"
-                placeholder="**********"
-                id="confirmPassword"
-                v-model="formState.confirmPassword"
-                required
-              />
-              <span class="toggle-password" @click="togglePasswordVisibility">
-                <i :class="passwordVisible ? 'icon-eye' : 'icon-eye-off'"></i>
-              </span>
-            </div>
-          </label>
-          <!-- Sign Up Button -->
-          <button type="submit" class="glow-on-hover">Sign Up</button>
-        </div>
-      </form>
-      <!-- Display error message if any -->
-      <p v-show="formState.errorMsg" class="error-msg">{{ formState.errorMsg }}</p>
-      <!-- Display success message if registration is successful -->
-      <p v-show="formState.successMsg" class="success-msg">{{ formState.successMsg }}</p>
-      <p>
-        Have an account?
-        <!-- Redirect to login page using PersonalRouter -->
-        <PersonalRouter :route="goToRoute" :buttonText="buttonText" class="sign-up-link" />
-      </p>
+            </label>
+            <!-- Password Input Field -->
+            <label class="label">Password
+              <div class="password-wrapper">
+                <input
+                  :type="passwordVisible ? 'text' : 'password'"
+                  placeholder="**********"
+                  id="password"
+                  v-model="formState.password"
+                  required
+                />
+                <span class="toggle-password" @click="togglePasswordVisibility">
+                  <i :class="passwordVisible ? 'icon-eye' : 'icon-eye-off'"></i>
+                </span>
+              </div>
+            </label>
+            <!-- Confirm Password Input Field -->
+            <label class="label">Confirm password
+              <div class="password-wrapper">
+                <input
+                  :type="passwordVisible ? 'text' : 'password'"
+                  placeholder="**********"
+                  id="confirmPassword"
+                  v-model="formState.confirmPassword"
+                  required
+                />
+                <span class="toggle-password" @click="togglePasswordVisibility">
+                  <i :class="passwordVisible ? 'icon-eye' : 'icon-eye-off'"></i>
+                </span>
+              </div>
+            </label>
+            <!-- Sign Up Button -->
+            <button type="submit" class="glow-on-hover">Sign Up</button>
+          </div>
+        </form>
+        <!-- Display error message if any -->
+        <p v-show="formState.errorMsg" class="error-msg">{{ formState.errorMsg }}</p>
+        <!-- Display success message if registration is successful -->
+        <p v-show="formState.successMsg" class="success-msg">{{ formState.successMsg }}</p>
+        <p>
+          Have an account?
+          <!-- Redirect to login page using PersonalRouter -->
+          <PersonalRouter :route="goToRoute" :buttonText="buttonText" class="sign-up-link" />
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -202,14 +204,20 @@ const signUp = () => {
 </script>
 
 <style scoped>
-.container {
+.main-container {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
   min-height: 100vh;
   background-color: #121212;
-  color: #F0F0F0;
+}
+
+.container {
+  background-color: #121212;
+  color: #f0f0f0;
   padding: 2rem;
+  width: 100%;
+  max-width: 600px;
 }
 
 .header {
@@ -219,7 +227,7 @@ const signUp = () => {
 
 .title {
   font-size: 2rem;
-  color: #28A745;
+  color: #28a745;
 }
 
 .nav-links {
@@ -236,7 +244,7 @@ const signUp = () => {
 
 .nav-links a {
   text-decoration: none;
-  color: #28A745;
+  color: #28a745;
 }
 
 .nav-links a:hover {
@@ -244,12 +252,11 @@ const signUp = () => {
 }
 
 .register-container {
-  background-color: #1E1E1E;
+  background-color: #1e1e1e;
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
-  width: 100%;
+  margin-top: 2rem;
 }
 
 .header-title {
@@ -269,9 +276,8 @@ const signUp = () => {
   gap: 1rem;
 }
 
-label {
-  display: flex;
-  flex-direction: column;
+.label {
+  margin-bottom: 0.5rem;
 }
 
 .password-wrapper {
@@ -287,7 +293,7 @@ input {
 
 .toggle-password {
   position: absolute;
-  right: 10px;
+  right: 0.5rem;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
@@ -308,7 +314,7 @@ input {
 
 button {
   padding: 0.75rem;
-  background-color: #28A745;
+  background-color: #28a745;
   color: white;
   border: none;
   border-radius: 4px;
@@ -334,7 +340,7 @@ button:hover {
   display: block;
   text-align: center;
   margin-top: 1rem;
-  color: #28A745;
+  color: #28a745;
   cursor: pointer;
 }
 
