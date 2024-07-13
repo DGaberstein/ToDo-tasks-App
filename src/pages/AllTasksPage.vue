@@ -1,37 +1,65 @@
-<!--
-This file defines a Vue.js component for displaying and managing tasks in a to-do application.
-By building this component, we will achieve a user interface that shows a list of all tasks,
-allowing users to mark tasks as completed and delete them, leveraging global state management with Pinia.js.
--->
-
 <template>
   <div>
     <h3 class="page-heading">This Page Displays all tasks</h3>
     
+    <div>
+      <label for="search">Search:</label>
+      <input v-model="searchQuery" @input="searchTasksHandler" type="text" id="search" />
+    </div>
+    
+    <div>
+      <label for="sort">Sort by:</label>
+      <select v-model="sortCriteria.key" @change="sortTasksHandler">
+        <option value="dueDate">Due Date</option>
+        <option value="priority">Priority</option>
+        <option value="isCompleted">Completion Status</option>
+      </select>
+      <select v-model="sortCriteria.order" @change="sortTasksHandler">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+    </div>
+
     <div class="container">
-      <!-- Loop through the tasks array and render each task in a list item -->
       <ul>
-        <li v-for="task in tasks" :key="task.id" class="task-item">
-          <!-- Display the title of the task -->
-          <h5>{{ task.title }}</h5>
-          <!-- Display the description title of the task -->
-          <h6>{{ task.description.title }}</h6>
-          <!-- Display the time to be completed of the task -->
-          <h6>{{ task.description.timeToBeCompleted }}</h6>
-          <!-- Loop through the extraInfoRequired array and render each item in a list item -->
-          <ul class="extra-info">
-            <li v-for="(extraInfo, index) in task.description.extraInfoRequired" :key="index">
-              {{ extraInfo }}
-            </li>
-          </ul>
-          <!-- Display whether the task is completed or incomplete -->
-          <h6>{{ task.isCompleted ? "Completed" : "Incomplete" }}</h6>
-          <!-- Button to mark the task as completed -->
-          <button :disabled="task.isCompleted" @click="markTaskCompleted(task.id)">
-            Mark as Completed
-          </button>
-          <!-- Button to delete the task -->
-          <button @click="deleteTask(task.id)">Delete Task</button>
+        <li v-for="task in filteredTasks" :key="task.id" class="task-item">
+          <div v-if="editingTaskId === task.id">
+            <input v-model="editTaskData.title" placeholder="Title" />
+            <input v-model="editTaskData.description.title" placeholder="Description" />
+            <input v-model="editTaskData.description.timeToBeCompleted" placeholder="Time to be Completed" />
+            <input v-model="editTaskData.dueDate" type="date" placeholder="Due Date" />
+            <input v-model="editTaskData.priority" placeholder="Priority" />
+            <input v-model="editTaskData.category" placeholder="Category" />
+            <input v-model="editTaskData.subtasks" placeholder="Subtasks (comma separated)" />
+            <div class="button-group">
+              <button @click="saveTask(task.id)">Save</button>
+              <button @click="cancelEdit">Cancel</button>
+            </div>
+          </div>
+          <div v-else>
+            <h5>{{ task.title }}</h5>
+            <h6>{{ task.description.title }}</h6>
+            <h6>{{ task.description.timeToBeCompleted }}</h6>
+            <h6>Due: {{ task.dueDate }}</h6>
+            <h6>Priority: {{ task.priority }}</h6>
+            <h6>Category: {{ task.category }}</h6>
+            <ul class="extra-info">
+              <li v-for="(extraInfo, index) in task.description.extraInfoRequired" :key="index">
+                {{ extraInfo }}
+              </li>
+            </ul>
+            <ul>
+              <li v-for="(subtask, index) in task.subtasks" :key="index">
+                {{ subtask }}
+              </li>
+            </ul>
+            <h6>{{ task.isCompleted ? "Completed" : "Incomplete" }}</h6>
+            <button :disabled="task.isCompleted" @click="markTaskCompleted(task.id)">
+              Mark as Completed
+            </button>
+            <button @click="deleteTask(task.id)">Delete Task</button>
+            <button @click="startEditingTask(task)">Edit Task</button>
+          </div>
         </li>
       </ul>
     </div>
@@ -39,10 +67,44 @@ allowing users to mark tasks as completed and delete them, leveraging global sta
 </template>
 
 <script setup>
+import { computed, ref } from "vue";
 import { useTaskStore } from "../stores/taskStore";
 
-const taskstore = useTaskStore();
-const { tasks, deleteTask, markTaskCompleted } = taskstore;
+const taskStore = useTaskStore();
+const { tasks, markTaskCompleted, deleteTask, searchTasks, sortTasks, filterAndSortTasks, editTask } = taskStore;
+
+const searchQuery = ref("");
+const sortCriteria = ref({
+  key: "dueDate",
+  order: "asc",
+});
+const editingTaskId = ref(null);
+const editTaskData = ref({});
+
+const filteredTasks = computed(() => filterAndSortTasks());
+
+const searchTasksHandler = () => {
+  searchTasks(searchQuery.value);
+};
+
+const sortTasksHandler = () => {
+  sortTasks(sortCriteria.value.key, sortCriteria.value.order);
+};
+
+const startEditingTask = (task) => {
+  editingTaskId.value = task.id;
+  editTaskData.value = { ...task, subtasks: task.subtasks.join(", ") };
+};
+
+const saveTask = (taskId) => {
+  const updatedTask = { ...editTaskData.value, subtasks: editTaskData.value.subtasks.split(", ") };
+  taskStore.editTask(updatedTask);
+  editingTaskId.value = null;
+};
+
+const cancelEdit = () => {
+  editingTaskId.value = null;
+};
 </script>
 
 <style scoped>
@@ -106,6 +168,6 @@ const { tasks, deleteTask, markTaskCompleted } = taskstore;
 <!--
 Summary:
 This file implements a Vue.js component that displays a list of tasks from the global state managed by Pinia.js.
-It allows users to mark tasks as completed or delete them. The component leverages Pinia's state management to
+It allows users to mark tasks as completed, delete them, and edit them. The component leverages Pinia's state management to
 interact with the tasks and provide necessary functionalities.
 -->

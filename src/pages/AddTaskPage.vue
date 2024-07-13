@@ -1,8 +1,3 @@
-<!--
-This file defines a Vue.js component for adding a new task to a to-do application.
-By building this component, we will achieve a user interface that allows users to input details for a new task and add it to the global state managed by Pinia.js.
--->
-
 <template>
   <div>
     <h3 class="page-heading">Add New Task</h3>
@@ -25,18 +20,33 @@ By building this component, we will achieve a user interface that allows users t
           <input v-model="newTask.description.timeToBeCompleted" type="text" id="timeToBeCompleted" required />
         </div>
         <div>
-          <label for="extraInfo">Extra Info Required:</label>
-          <input v-model="newExtraInfo" type="text" id="extraInfo" />
+          <label for="dueDate">Due Date:</label>
+          <input v-model="newTask.dueDate" type="date" id="dueDate" required />
+        </div>
+        <div>
+          <label for="priority">Priority:</label>
+          <select v-model="newTask.priority" id="priority" required>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div>
+          <label for="category">Category:</label>
+          <input v-model="newTask.category" type="text" id="category" />
+        </div>
+        <div>
+          <label for="subtasks">Subtasks:</label>
+          <input v-model="newSubtask" type="text" id="subtasks" />
           <ul>
-            <li v-for="(info, index) in newTask.description.extraInfoRequired" :key="index">
-              {{ info }}
-              <button type="button" @click="removeExtraInfo(index)">Remove</button>
+            <li v-for="(subtask, index) in newTask.subtasks" :key="index">
+              {{ subtask }}
+              <button type="button" @click="removeSubtask(index)">Remove</button>
             </li>
           </ul>
+          <button type="button" @click="addSubtask">Add Subtask</button>
         </div>
-        <!-- Adjusted placement for Add Task and Add Info -->
         <div class="button-container">
-          <button type="button" @click="addExtraInfo">Add Info</button>
           <button type="submit">Add Task</button>
         </div>
       </form>
@@ -45,15 +55,11 @@ By building this component, we will achieve a user interface that allows users t
 </template>
 
 <script setup>
-// Importing reactive and ref from Vue for reactivity and references
 import { reactive, ref } from "vue";
-// Importing the useTaskStore function from taskStore to interact with the task store
 import { useTaskStore } from "../stores/taskStore";
 
-// Use the task store
 const taskStore = useTaskStore();
 const { addTask } = taskStore;
-// Reactive object for the new task
 const newTask = reactive({
   id: Date.now(),
   title: "",
@@ -62,17 +68,15 @@ const newTask = reactive({
     title: "",
     extraInfoRequired: [],
   },
+  dueDate: "",
+  priority: "medium",
+  category: "",
+  subtasks: [],
   isCompleted: false,
 });
- // Reference for new extra info input
-const newExtraInfo = ref("");
+const newSubtask = ref("");
 const taskAdded = ref(false);
 
-// ------------------------------------------------------------------------
-// Methods Block
-// ------------------------------------------------------------------------
-
-// Function to handle form submission
 const handleSubmit = () => {
   const taskToAdd = JSON.parse(JSON.stringify(newTask));
   taskToAdd.id = Date.now();
@@ -80,67 +84,32 @@ const handleSubmit = () => {
   taskAdded.value = true;
 };
 
-/*
-  The handleSubmit function handles the form submission process.
-  - It creates a deep copy of the newTask object to avoid any reactivity issues.
-  - It updates the id of the taskToAdd to ensure it is unique by setting it to the current timestamp.
-  - It calls the addTask function from the task store to add the new task to the global state.
-  - It sets taskAdded to true to indicate that a task has been successfully added.
-  */
-
-// Function to add extra info
-const addExtraInfo = () => {
-  if (newExtraInfo.value.trim()) {
-    newTask.description.extraInfoRequired.push(newExtraInfo.value.trim());
-    newExtraInfo.value = "";
+const addSubtask = () => {
+  if (newSubtask.value.trim()) {
+    newTask.subtasks.push(newSubtask.value.trim());
+    newSubtask.value = "";
   }
 };
 
-/*
-  The addExtraInfo function adds an extra information item to the new task's description.
-  - It checks if the newExtraInfo input value is not empty after trimming whitespace.
-  - If valid, it pushes the trimmed value to the extraInfoRequired array of the new task's description.
-  - It then clears the newExtraInfo input field.
-  */
-
-// Function to remove extra info
-const removeExtraInfo = (index) => {
-  newTask.description.extraInfoRequired.splice(index, 1);
+const removeSubtask = (index) => {
+  newTask.subtasks.splice(index, 1);
 };
 
-/*
-  The removeExtraInfo function removes an extra information item from the new task's description.
-  - It takes an index as a parameter.
-  - It removes the item at the specified index from the extraInfoRequired array using the splice method.
-  */
-
-// Function to reset the form
 const resetForm = () => {
   newTask.title = "";
   newTask.description.title = "";
   newTask.description.timeToBeCompleted = "";
   newTask.description.extraInfoRequired = [];
+  newTask.dueDate = "";
+  newTask.priority = "medium";
+  newTask.category = "";
+  newTask.subtasks = [];
 };
 
-/*
-  The resetForm function resets all the fields of the new task form to their initial states.
-  - It clears the title field by setting newTask.title to an empty string.
-  - It clears the description title field by setting newTask.description.title to an empty string.
-  - It clears the time to be completed field by setting newTask.description.timeToBeCompleted to an empty string.
-  - It clears the extra info required array by setting newTask.description.extraInfoRequired to an empty array.
-  */
-
-// Function to start a new task submission
 const startNewTask = () => {
-  resetForm(); 
+  resetForm();
   taskAdded.value = false;
 };
-
-/*
-  The startNewTask function resets the form and prepares it for a new task submission.
-  - It calls the resetForm function to clear all form fields.
-  - It sets taskAdded to false to hide the success message and display the form again.
-  */
 </script>
 
 <style scoped>
