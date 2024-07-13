@@ -218,4 +218,16 @@ button:hover {
   border-radius: 8px;
   margin-bottom: 1rem;
 }
+
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 0 1rem; /* Adjust padding for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  nav {
+    flex-direction: column; /* Stack navigation links vertically on smaller screens */
+  }
+}
 </style>

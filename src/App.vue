@@ -15,6 +15,8 @@
           <button @click="handleSignOut">Sign Out</button>
         </template>
       </nav>
+      <!-- Toggle button for dark mode -->
+      <ThemeToggle />
     </div>
   </header>
 
@@ -34,6 +36,8 @@ import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 // Import useUserStore to access user-related data and actions
 import { useUserStore } from "../src/stores/user";
+// React-based ThemeToggle
+import ThemeToggle from './components/ThemeToggle.vue';
 
 // ------------------------------------------------------------------------
 // Variable Definition Block
@@ -47,7 +51,6 @@ const userStore = useUserStore();
 const { user, isLoggedIn } = storeToRefs(userStore);
 // Reactive variable to hide/show elements based on user login status
 const isUserloggedIn = ref(false);
-
 
 // Using the onMounted lifecycle hook to perform actions when the component is mounted
 // onMounted(() => {

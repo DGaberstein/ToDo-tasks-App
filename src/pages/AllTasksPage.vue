@@ -114,56 +114,43 @@ const cancelEdit = () => {
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
+  max-width: 100%; /* Adjust to allow full responsiveness */
   margin: 0 auto;
 }
 
-.task-item {
-  margin-bottom: 1rem;
-  padding: 1rem;
-  background-color: #1e1e1e;
-  border-radius: 4px;
+@media (min-width: 600px) {
+  .tasks-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .task-container {
+    margin: 0.5rem;
+    flex: 1 1 calc(50% - 1rem);
+    box-sizing: border-box;
+  }
 }
 
-.task-item h5 {
-  margin-bottom: 0.5rem;
+@media (min-width: 900px) {
+  .task-container {
+    flex: 1 1 calc(33.33% - 1rem);
+  }
 }
 
-.task-item h6 {
-  margin-bottom: 0.25rem;
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 0 1rem; /* Adjust padding for smaller screens */
+  }
 }
 
-.task-item .extra-info {
-  list-style-type: none;
-  margin-bottom: 0.5rem;
-  padding-left: 0;
-}
-
-.task-item button {
-  padding: 0.5rem 1rem;
-  background-color: #00bd7e;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.task-item button[disabled] {
-  background-color: #6c757d;
-  cursor: not-allowed;
-}
-
-.task-item button:hover {
-  background-color: #00bd7e;
-}
-
-.page-heading {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #00bd7e;
-  margin-top: 2rem;
+@media (max-width: 480px) {
+  nav {
+    flex-direction: column; /* Stack navigation links vertically on smaller screens */
+  }
 }
 </style>
+
 
 <!--
 Summary:

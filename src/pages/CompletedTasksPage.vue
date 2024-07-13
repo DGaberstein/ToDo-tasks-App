@@ -72,19 +72,12 @@ let completedTasks = computed(() => tasks.filter((task) => task.isCompleted));
   padding: 2rem;
 }
 
-.page-heading {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #00bd7e;
-  margin-top: 2rem;
-}
-
 .tasks-list {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 1200px;
+  max-width: 100%; /* Adjust to allow full responsiveness */
   padding: 0;
   margin: 0;
   list-style-type: none;
@@ -97,27 +90,6 @@ let completedTasks = computed(() => tasks.filter((task) => task.isCompleted));
   margin-bottom: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 100%;
-}
-
-.extra-info-list {
-  list-style-type: none;
-  padding: 0;
-}
-
-.extra-info-item {
-  margin: 0.5rem 0;
-}
-
-h5, h6 {
-  margin: 0.5rem 0;
-}
-
-h5 {
-  color: #00bd7e;
-}
-
-h6 {
-  color: #00bd7e;
 }
 
 @media (min-width: 600px) {
@@ -137,6 +109,18 @@ h6 {
 @media (min-width: 900px) {
   .task-container {
     flex: 1 1 calc(33.33% - 1rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 0 1rem; /* Adjust padding for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  nav {
+    flex-direction: column; /* Stack navigation links vertically on smaller screens */
   }
 }
 </style>
