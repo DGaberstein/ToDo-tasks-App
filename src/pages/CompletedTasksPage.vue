@@ -1,126 +1,29 @@
-<!--
-This file defines a Vue.js component for displaying completed tasks in a to-do application.
-By building this component, we will achieve a user interface that shows a list of tasks marked as completed, leveraging global state management with Pinia.js.
--->
-
 <template>
-  <div class="container">
-    <h4 class="page-heading">This Page Displays Completed Tasks</h4>
-    <ul class="tasks-list">
-      <!-- Loop through the completedTasks array and render each task -->
-      <li v-for="task in completedTasks" v-bind:key="task.id" class="task-container">
-        <!-- Display the title of the task -->
-        <h5>{{ task.title }}</h5>
-        <!-- Display the description title of the task -->
-        <h6>{{ task.description.title }}</h6>
-        <!-- Display the time to be completed of the task -->
-        <h6>{{ task.description.timeToBeCompleted }}</h6>
-        <!-- Loop through the extraInfoRequired array and render each item in a list item -->
-        <ul class="extra-info-list">
-          <li v-for="(extraInfo, index) in task.description.extraInfoRequired" v-bind:key="index" class="extra-info-item">
-            {{ extraInfo }}
-          </li>
-        </ul>
-      </li>
-    </ul>
+  <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg transition-colors duration-300">
+    <div class="px-4 py-5 sm:p-6">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Completed Tasks</h1>
+      <ul class="space-y-4">
+        <li v-for="task in completedTasks" :key="task.id" class="bg-gray-50 dark:bg-gray-700 px-4 py-5 rounded-md transition-colors duration-300">
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white">{{ task.title }}</h2>
+          <p class="text-gray-600 dark:text-gray-300">{{ task.description.title }}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Time to complete: {{ task.description.timeToBeCompleted }}</p>
+          <ul class="mt-2">
+            <li v-for="(extraInfo, index) in task.description.extraInfoRequired" :key="index" class="text-sm text-gray-600 dark:text-gray-300">
+              {{ extraInfo }}
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script setup>
-// ------------------------------------------------------------------------
-// Import Block
-// ------------------------------------------------------------------------
-
-// Import computed from Vue to create a computed property
 import { computed } from "vue";
-// Import the useTaskStore function from taskStore to interact with the task store
 import { useTaskStore } from "../stores/taskStore";
 
-// ------------------------------------------------------------------------
-// Store Access Block
-// ------------------------------------------------------------------------
+const taskStore = useTaskStore();
+const { tasks } = taskStore;
 
-// Use the task store by saving it in a variable
-const taskstore = useTaskStore();
-
-// Destructure all the possible pieces of data that we want out of this
-const { tasks } = taskstore;
-
-// ------------------------------------------------------------------------
-// Computed Properties Block
-// ------------------------------------------------------------------------
-
-// Computed property to filter completed tasks
-let completedTasks = computed(() => tasks.filter((task) => task.isCompleted));
-
-/*
-  The completedTasks computed property filters the tasks array to include only the tasks that are marked as completed.
-  - It uses the filter method to iterate over the tasks array.
-  - For each task, it checks if the isCompleted property is true.
-  - The resulting array contains only the tasks that are completed.
-  */
+const completedTasks = computed(() => tasks.filter((task) => task.isCompleted));
 </script>
-
-<style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #121212;
-  color: #f0f0f0;
-  padding: 2rem;
-}
-
-.tasks-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 100%; /* Adjust to allow full responsiveness */
-  padding: 0;
-  margin: 0;
-  list-style-type: none;
-}
-
-.task-container {
-  background-color: #1e1e1e;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%;
-}
-
-@media (min-width: 600px) {
-  .tasks-list {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .task-container {
-    margin: 0.5rem;
-    flex: 1 1 calc(50% - 1rem);
-    box-sizing: border-box;
-  }
-}
-
-@media (min-width: 900px) {
-  .task-container {
-    flex: 1 1 calc(33.33% - 1rem);
-  }
-}
-
-@media (max-width: 768px) {
-  .wrapper {
-    padding: 0 1rem; /* Adjust padding for smaller screens */
-  }
-}
-
-@media (max-width: 480px) {
-  nav {
-    flex-direction: column; /* Stack navigation links vertically on smaller screens */
-  }
-}
-</style>

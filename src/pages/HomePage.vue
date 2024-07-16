@@ -4,18 +4,24 @@ It demonstrates how to consume and display data from a Pinia store, and how to c
 -->
 
 <template>
-  <main class="container">
-    <h4>Home View</h4>
-
-    <!-- First way of consuming data from the store -->
-    <!-- Even though it is accessible, this can be hard to read, so get used to reading -->
-    <p>{{ useCounterStore().count }}</p>
-
-    <!-- Using 2nd way -->
-    <p>{{ countNumber }}</p>
-    <p>{{ doubleCountNumber }}</p>
-    <button @click="incrementNumberFunctionFromStore">Add +1</button>
-  </main>
+  <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg transition-colors duration-300">
+    <div class="px-4 py-5 sm:p-6">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Welcome to Your Task Manager</h1>
+      <div class="space-y-4">
+        <div class="bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 rounded-md transition-colors duration-300">
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Current Count</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">{{ countNumber }}</dd>
+        </div>
+        <div class="bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 rounded-md transition-colors duration-300">
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Double Count</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">{{ doubleCountNumber }}</dd>
+        </div>
+      </div>
+      <button @click="incrementNumberFunctionFromStore" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300">
+        Increment Count
+      </button>
+    </div>
+  </div>
 </template>
 
 <script setup>

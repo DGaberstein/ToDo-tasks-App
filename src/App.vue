@@ -36,8 +36,8 @@ import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 // Import useUserStore to access user-related data and actions
 import { useUserStore } from "../src/stores/user";
-// React-based ThemeToggle
-import ThemeToggle from './components/ThemeToggle.vue';
+// App Layout / AppLayout
+import AppLayout from './components/AppLayout.vue';
 
 // ------------------------------------------------------------------------
 // Variable Definition Block
@@ -113,3 +113,14 @@ What is storeToRefs?
 In order to extract properties from the store while keeping its reactivity, you need to use storeToRefs(). It will create refs for every reactive property. This is useful when you are only using state from the store but not calling any action. Note you can destructure actions directly from the store as they are bound to the store itself too.
 Link: https://pinia.vuejs.org/core-concepts/
 -->
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

@@ -1,53 +1,64 @@
 <template>
-  <div>
-    <h3 class="page-heading">Add New Task</h3>
-    <div v-if="taskAdded">
-      <p>Yay! New task created.</p>
-      <button @click="startNewTask">Start a New Task</button>
-    </div>
-    <div v-else>
-      <form @submit.prevent="handleSubmit">
+  <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg transition-colors duration-300">
+    <div class="px-4 py-5 sm:p-6">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Add New Task</h1>
+      <div v-if="taskAdded" class="bg-green-100 dark:bg-green-800 border-l-4 border-green-500 text-green-700 dark:text-green-200 p-4 mb-4" role="alert">
+        <p class="font-bold">Success!</p>
+        <p>New task created.</p>
+        <button @click="startNewTask" class="mt-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-300">
+          Start a New Task
+        </button>
+      </div>
+      <form v-else @submit.prevent="handleSubmit" class="space-y-4">
         <div>
-          <label for="title">Title:</label>
-          <input v-model="newTask.title" type="text" id="title" required />
+          <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Title:</label>
+          <input v-model="newTask.title" type="text" id="title" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
         </div>
         <div>
-          <label for="descriptionTitle">Description Title:</label>
-          <input v-model="newTask.description.title" type="text" id="descriptionTitle" required />
+          <label for="descriptionTitle" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description Title:</label>
+          <input v-model="newTask.description.title" type="text" id="descriptionTitle" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
         </div>
         <div>
-          <label for="timeToBeCompleted">Time to be Completed:</label>
-          <input v-model="newTask.description.timeToBeCompleted" type="text" id="timeToBeCompleted" required />
+          <label for="timeToBeCompleted" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Time to be Completed:</label>
+          <input v-model="newTask.description.timeToBeCompleted" type="text" id="timeToBeCompleted" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
         </div>
         <div>
-          <label for="dueDate">Due Date:</label>
-          <input v-model="newTask.dueDate" type="date" id="dueDate" required />
+          <label for="dueDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Due Date:</label>
+          <input v-model="newTask.dueDate" type="date" id="dueDate" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
         </div>
         <div>
-          <label for="priority">Priority:</label>
-          <select v-model="newTask.priority" id="priority" required>
+          <label for="priority" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Priority:</label>
+          <select v-model="newTask.priority" id="priority" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
             <option value="high">High</option>
             <option value="medium">Medium</option>
             <option value="low">Low</option>
           </select>
         </div>
         <div>
-          <label for="category">Category:</label>
-          <input v-model="newTask.category" type="text" id="category" />
+          <label for="category" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Category:</label>
+          <input v-model="newTask.category" type="text" id="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
         </div>
         <div>
-          <label for="subtasks">Subtasks:</label>
-          <input v-model="newSubtask" type="text" id="subtasks" />
-          <ul>
-            <li v-for="(subtask, index) in newTask.subtasks" :key="index">
-              {{ subtask }}
-              <button type="button" @click="removeSubtask(index)">Remove</button>
+          <label for="subtasks" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Subtasks:</label>
+          <div class="flex space-x-2">
+            <input v-model="newSubtask" type="text" id="subtasks" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+            <button type="button" @click="addSubtask" class="mt-1 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300">
+              Add Subtask
+            </button>
+          </div>
+          <ul class="mt-2 space-y-2">
+            <li v-for="(subtask, index) in newTask.subtasks" :key="index" class="flex items-center space-x-2">
+              <span class="text-gray-700 dark:text-gray-300">{{ subtask }}</span>
+              <button type="button" @click="removeSubtask(index)" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-200 transition-colors duration-300">
+                Remove
+              </button>
             </li>
           </ul>
-          <button type="button" @click="addSubtask">Add Subtask</button>
         </div>
-        <div class="button-container">
-          <button type="submit">Add Task</button>
+        <div class="flex justify-end">
+          <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300">
+            Add Task
+          </button>
         </div>
       </form>
     </div>
@@ -60,6 +71,7 @@ import { useTaskStore } from "../stores/taskStore";
 
 const taskStore = useTaskStore();
 const { addTask } = taskStore;
+
 const newTask = reactive({
   id: Date.now(),
   title: "",
@@ -74,6 +86,7 @@ const newTask = reactive({
   subtasks: [],
   isCompleted: false,
 });
+
 const newSubtask = ref("");
 const taskAdded = ref(false);
 
@@ -111,123 +124,3 @@ const startNewTask = () => {
   taskAdded.value = false;
 };
 </script>
-
-<style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #121212;
-  color: #f0f0f0;
-  padding: 2rem;
-}
-
-.header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.title {
-  font-size: 2rem;
-  color: #28a745;
-}
-
-.form-container {
-  background-color: #1e1e1e;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
-  width: 100%;
-}
-
-.header-title {
-  text-align: center;
-  margin-bottom: 0.5rem;
-}
-
-.form {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-label {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  padding: 0.75rem;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #218838;
-}
-
-.error-msg {
-  color: red;
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-.success-msg {
-  color: #218838;
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-.page-heading {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #00bd7e;
-  margin-top: 2rem;
-}
-
-.button-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1rem;
-}
-
-.button-container button {
-  flex: 1;
-  margin: 0 5px;
-}
-
-.info-container {
-  background-color: #2b2b2b;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-
-@media (max-width: 768px) {
-  .wrapper {
-    padding: 0 1rem; /* Adjust padding for smaller screens */
-  }
-}
-
-@media (max-width: 480px) {
-  nav {
-    flex-direction: column; /* Stack navigation links vertically on smaller screens */
-  }
-}
-</style>
