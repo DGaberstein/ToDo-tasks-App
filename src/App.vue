@@ -1,11 +1,12 @@
 <template>
-  <header>
-    <div class="wrapper">
-      <nav>
-        <template v-if="!isLoggedIn">
-          <!-- If the user is not logged in, the navigation will be handled by SignIn and SignUp components -->
-        </template>
-        <template v-else>
+  <div>
+    <header>
+      <div class="wrapper">
+        <nav>
+          <template v-if="!isLoggedIn">
+            <!-- If the user is not logged in, the navigation will be handled by SignIn and SignUp components -->
+          </template>
+          <template v-else>
             <!-- If the user is logged in, show these links -->
             <RouterLink to="/">Home</RouterLink>
             <RouterLink to="/about">About</RouterLink>
@@ -15,14 +16,18 @@
             <RouterLink to="/profile">Profile</RouterLink>
             <button @click="handleSignOut">Sign Out</button>
           </template>
-      </nav>
-      <!-- Toggle button for dark mode -->
-      <ThemeToggle />
-    </div>
-  </header>
+        </nav>
+        <!-- Toggle button for dark mode -->
+        <ThemeToggle />
+      </div>
+    </header>
 
-  <!-- RouterView to display the current route's component -->
-  <RouterView />
+    <!-- Main content section to avoid overlap with header -->
+    <main>
+      <!-- RouterView to display the current route's component -->
+      <RouterView />
+    </main>
+  </div>
 </template>
 
 <script setup>
@@ -115,13 +120,34 @@ In order to extract properties from the store while keeping its reactivity, you 
 Link: https://pinia.vuejs.org/core-concepts/
 -->
 <style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #181818;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
 }
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+nav {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  margin-left: 10px;
+}
+
+/* Ensure RouterView is not overlapping with the header */
+main {
+  padding-top: 60px;
 }
 </style>
