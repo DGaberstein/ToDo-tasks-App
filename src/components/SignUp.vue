@@ -5,8 +5,8 @@
         <h1 class="title heading-2">The ToDo App</h1>
         <nav>
           <ul class="nav-links">
-            <RouterLink to="/auth/login" class="c-white">Login</RouterLink>
-            <RouterLink to="/auth/register" class="c-white">Register</RouterLink>
+            <li><RouterLink to="/auth/login" class="c-white">Login</RouterLink></li>
+            <li><RouterLink to="/auth/register" class="c-white">Register</RouterLink></li>
           </ul>
         </nav>
       </div>
@@ -55,39 +55,51 @@
                 </span>
               </div>
             </label>
-            <!-- Sign Up Button -->
-            <button type="submit" class="glow-on-hover">Sign Up</button>
+            <!-- Terms and Conditions -->
+            <label class="terms-checkbox">
+              <input
+                type="checkbox"
+                id="terms"
+                v-model="formState.termsAccepted"
+                required
+              />
+              <span class="checkbox-label">
+                I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a>.
+              </span>
+            </label>
+            <!-- Container for Sign Up Button and Account Link -->
+            <div class="action-container">
+              <button type="submit" class="glow-on-hover">Sign Up</button>
+              <p class="account-text">
+                Have an account? <PersonalRouter :route="goToRoute" :buttonText="buttonText" class="glow-on-hover" />
+              </p>
+            </div>
           </div>
         </form>
         <!-- Display error message if any -->
         <p v-show="formState.errorMsg" class="error-msg">{{ formState.errorMsg }}</p>
         <!-- Display success message if registration is successful -->
         <p v-show="formState.successMsg" class="success-msg">{{ formState.successMsg }}</p>
-        <p>
-          Have an account?
-          <!-- Redirect to login page using PersonalRouter -->
-          <PersonalRouter :route="goToRoute" :buttonText="buttonText" class="sign-up-link" />
-        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive, ref } from "vue"; // Importing reactive and ref from Vue
-import { useRouter } from "vue-router"; // Importing useRouter from Vue Router
-import PersonalRouter from "./PersonalRouter.vue"; // Importing PersonalRouter component
-import { useUserStore } from "../stores/user"; // Importing user store
+import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
+import PersonalRouter from "./PersonalRouter.vue";
+import { useUserStore } from "../stores/user";
 
 // ------------------------------------------------------------------------
 // Reactive State Block
 // ------------------------------------------------------------------------
 
-// Reactive state for form inputs and messages
 const formState = reactive({
   email: "",
   password: "",
   confirmPassword: "",
+  termsAccepted: false,
   errorMsg: "",
   successMsg: "",
 });
@@ -96,37 +108,24 @@ const formState = reactive({
 // Initialization Block
 // ------------------------------------------------------------------------
 
-const router = useRouter(); // Initializing router
-const userStore = useUserStore(); // Initializing user store
-const goToRoute = "/auth/login"; // Defining route for redirecting
-const buttonText = "Sign In"; // Defining button text
-const passwordVisible = ref(false); // Reactive reference for password visibility
+const router = useRouter();
+const userStore = useUserStore();
+const goToRoute = "/auth/login";
+const buttonText = "Sign In";
+const passwordVisible = ref(false);
 
 // ------------------------------------------------------------------------
 // Function to toggle password visibility
 // ------------------------------------------------------------------------
 
-/**
- * Toggles the visibility of the password fields.
- */
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
 };
-
-/*
-  The togglePasswordVisibility function is used to toggle the visibility of the password fields.
-  - It flips the boolean value of passwordVisible to switch between text and password input types.
-*/
 
 // ------------------------------------------------------------------------
 // Function to validate password strength
 // ------------------------------------------------------------------------
 
-/**
- * Validates the strength of the password.
- * @param {string} password - The password to validate.
- * @returns {string|null} - Returns an error message if validation fails, otherwise null.
- */
 const validatePassword = (password) => {
   const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{12,}$/;
   if (!regex.test(password)) {
@@ -144,21 +143,20 @@ const validatePassword = (password) => {
   return null;
 };
 
-/*
-  The validatePassword function checks the password strength.
-  - It uses regex to ensure the password contains uppercase, lowercase, numbers, and symbols.
-  - It avoids common dictionary words or patterns.
-  - It checks against previously used passwords.
-*/
-
 // ------------------------------------------------------------------------
 // Function to handle user registration
 // ------------------------------------------------------------------------
 
-/**
- * Handles the user registration process.
- */
 const signUp = () => {
+  // Validate terms acceptance
+  if (!formState.termsAccepted) {
+    formState.errorMsg = "You must agree to the terms of service and privacy policy.";
+    setTimeout(() => {
+      formState.errorMsg = "";
+    }, 2000);
+    return;
+  }
+  
   // Validate passwords match
   if (formState.password !== formState.confirmPassword) {
     formState.errorMsg = "Passwords do not match. Please try again.";
@@ -182,6 +180,7 @@ const signUp = () => {
       formState.email = "";
       formState.password = "";
       formState.confirmPassword = "";
+      formState.termsAccepted = false;
       formState.errorMsg = "";
       formState.successMsg = "Registration successful!";
       setTimeout(() => {
@@ -195,12 +194,6 @@ const signUp = () => {
     }, 5000);
   }
 };
-
-/*
-  The signUp function handles user registration.
-  - It ensures passwords match and meet strength criteria.
-  - It registers the user and displays success or error messages.
-*/
 </script>
 
 <style scoped>
@@ -234,7 +227,7 @@ const signUp = () => {
   list-style: none;
   padding: 0;
   display: flex;
-  justify-content: center;
+  justify-content: center; /* Center align the navigation links */
   gap: 1rem;
 }
 
@@ -529,5 +522,47 @@ a:hover:after {
   0% { background-position: 0 0; }
   50% { background-position: 400% 0; }
   100% { background-position: 0 0; }
+}
+
+.action-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align the elements inside the action-container */
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.account-text {
+  margin-left: 1rem;
+  color: #f0f0f0;
+}
+
+.account-text a {
+  color: #28a745;
+  text-decoration: none;
+}
+
+.account-text a:hover {
+  text-decoration: underline;
+}
+
+.terms-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.checkbox-label {
+  color: #f0f0f0;
+}
+
+.checkbox-label a {
+  color: #28a745;
+  text-decoration: none;
+}
+
+.checkbox-label a:hover {
+  text-decoration: underline;
 }
 </style>
