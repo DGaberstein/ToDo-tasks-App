@@ -37,8 +37,8 @@ const profileData = ref({
 
 onMounted(() => {
   if (user.value && profile.value) {
-    profileData.value.username = profile.value.username;
-    profileData.value.email = user.value.email;
+    profileData.value.username = profile.value.username || '';
+    profileData.value.email = user.value.email || '';
   }
 });
 
@@ -56,8 +56,8 @@ const updateProfile = async () => {
     }
 
     // Save the updated data using the store methods
-    userStore.updateUser(user.value);
-    userStore.updateProfile(profile.value);
+    await userStore.updateUser(user.value);
+    await userStore.updateProfile(profile.value);
 
     // Update message to indicate success
     message.value = 'Profile updated successfully';
