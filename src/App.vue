@@ -6,15 +6,15 @@
           <!-- If the user is not logged in, the navigation will be handled by SignIn and SignUp components -->
         </template>
         <template v-else>
-          <!-- If the user is logged in, show these links -->
-          <RouterLink to="/">Home</RouterLink>
-          <RouterLink to="/about">About</RouterLink>
-          <RouterLink to="/all-tasks">All Tasks</RouterLink>
-          <RouterLink to="/completed-tasks">Completed Tasks</RouterLink>
-          <RouterLink to="/add-task">Add New Task</RouterLink>
-          <RouterLink to="/profile">Profile</RouterLink>
-          <button @click="handleSignOut">Sign Out</button>
-        </template>
+            <!-- If the user is logged in, show these links -->
+            <RouterLink to="/">Home</RouterLink>
+            <RouterLink to="/about">About</RouterLink>
+            <RouterLink to="/all-tasks">All Tasks</RouterLink>
+            <RouterLink to="/completed-tasks">Completed Tasks</RouterLink>
+            <RouterLink to="/add-task">Add New Task</RouterLink>
+            <RouterLink to="/profile">Profile</RouterLink>
+            <button @click="handleSignOut">Sign Out</button>
+          </template>
       </nav>
       <!-- Toggle button for dark mode -->
       <ThemeToggle />
@@ -79,7 +79,7 @@ onMounted(() => {
       router.push({ path: "/" });
     }
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching user data:", error);
   }
 });
 
@@ -87,12 +87,12 @@ onMounted(() => {
 /**
  * Signs out the user and redirects to the login page.
  */
-const handleSignOut =  () => {
+ const handleSignOut = () => {
   try {
     userStore.signOut();
     router.push({ path: "/auth/login" });
   } catch (error) {
-    console.error("Error signing out:", error.message);
+    console.error("Error signing out:", error);
   }
 };
 
