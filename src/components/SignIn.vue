@@ -1,55 +1,76 @@
 <template>
-  <div class="container">
-    <div class="header">
-      <h1 class="title">The ToDo App</h1>
-      <nav>
-        <ul class="nav-links">
-          <!-- Display login and register links -->
-          <RouterLink to="/auth/login">Login</RouterLink>
-          <RouterLink to="/auth/register">Register</RouterLink>
-        </ul>
-      </nav>
-    </div>
-    <div class="login-container">
-      <h3 class="header-title">Log In to ToDo App</h3>
-      <form @submit.prevent="signIn">
-        <div class="form">
-          <!-- Email Input -->
-          <label>Email
-            <input id="email" type="text" v-model="formState.email" />
-          </label>
-          <!-- Password Input -->
-          <label>Password
-            <input id="password" type="password" v-model="formState.password" />
-          </label>
-          <!-- Submit Button -->
-          <button type="submit" class="glow-on-hover">Log In</button>
-        </div>
-      </form>
-      <!-- Display error message if login fails -->
-      <p v-if="formState.errorMsg" class="error-msg">{{ formState.errorMsg }}</p>
-
-      <p>
-        Don't have an account?
-        <!-- Redirect to registration page using PersonalRouter -->
-        <PersonalRouter :route="route" :buttonText="buttonText" class="sign-up-link" />
-      </p>
+  <div class="main-container">
+    <div class="container">
+      <div class="header">
+        <h1 class="title heading-2">The ToDo App</h1>
+        <nav>
+          <ul class="nav-links">
+            <li><RouterLink to="/auth/login" class="c-white">Login</RouterLink></li>
+            <li><RouterLink to="/auth/register" class="c-white">Register</RouterLink></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="login-container">
+        <h3 class="header-title heading-2">Log In to ToDo App</h3>
+        <form @submit.prevent="signIn">
+          <div class="form">
+            <!-- Email Input Field -->
+            <label class="label" for="email">Email
+              <input
+                type="email"
+                placeholder="example@gmail.com"
+                id="email"
+                v-model="formState.email"
+                required
+              />
+            </label>
+            <!-- Password Input Field -->
+            <label class="label" for="password">Password
+              <div class="password-wrapper">
+                <input
+                  :type="passwordVisible ? 'text' : 'password'"
+                  placeholder="**********"
+                  id="password"
+                  v-model="formState.password"
+                  aria-label="Password"
+                  required
+                />
+                <span 
+                  class="toggle-password"
+                  @click="togglePasswordVisibility"
+                  aria-label="Toggle password visibility"
+                >
+                  <i :class="passwordVisible ? 'icon-eye' : 'icon-eye-off'"></i>
+                </span>
+              </div>
+            </label>
+            <!-- Submit Button -->
+            <button type="submit" class="glow-on-hover">Log In</button>
+          </div>
+        </form>
+        <!-- Display error message if login fails -->
+        <p v-if="formState.errorMsg" class="error-msg">{{ formState.errorMsg }}</p>
+        <!-- Account creation link -->
+        <p class="account-text">
+          Don't have an account? <PersonalRouter :route="route" :buttonText="buttonText" class="glow-on-hover" />
+        </p>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import PersonalRouter from "./PersonalRouter.vue";
 import { useUserStore } from "../stores/user";
 import { storeToRefs } from "pinia";
 
-// Reactive variable to store email, password, and error messages
+// Reactive state block for form fields and error messages
 const formState = reactive({
   email: "",
   password: "",
-  errorMsg: "", // Initialize error message
+  errorMsg: "",
 });
 
 // Access router instance
@@ -63,25 +84,24 @@ const { isLoggedIn } = storeToRefs(userStore);
 const route = "/auth/register";
 const buttonText = "Sign Up";
 
+// Reactive variable for password visibility
+const passwordVisible = ref(false);
+
+// Function to toggle password visibility
+const togglePasswordVisibility = () => {
+  passwordVisible.value = !passwordVisible.value;
+};
+
 // Function to handle user sign-in
-let signIn = async () => {
+const signIn = async () => {
   try {
-    // Call signIn method from user store
     await userStore.signIn(formState.email, formState.password);
-    // Set isLoggedIn to true on successful login
     isLoggedIn.value = true;
-    // Redirect user to home page or desired route
     router.push("/");
   } catch (error) {
-    // Handle specific error messages
-    if (error.message === "User not found" || error.message === "Password incorrect") {
-      formState.errorMsg = "User not found or password incorrect";
-    } else {
-      // Handle other errors
-      console.error("Login error:", error.message);
-      formState.errorMsg = "An error occurred during login. Please try again.";
-    }
-    // Clear error message after 8 seconds
+    formState.errorMsg = error.message.includes("User not found") || error.message.includes("Password incorrect")
+      ? "User not found or password incorrect"
+      : "An error occurred during login. Please try again.";
     setTimeout(() => {
       formState.errorMsg = "";
     }, 8000);
@@ -90,15 +110,23 @@ let signIn = async () => {
 </script>
 
 <style scoped>
-.container {
+.main-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   min-height: 100vh;
+  background-color: #121212;
+}
+
+.container {
   background-color: #121212;
   color: #f0f0f0;
   padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .header {
@@ -120,7 +148,7 @@ let signIn = async () => {
 }
 
 .nav-links li {
-  margin: 0 0.5rem;
+  margin: 0;
 }
 
 .nav-links a {
@@ -137,14 +165,14 @@ let signIn = async () => {
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+  margin-top: 2rem;
   width: 100%;
-  margin: 0 auto;
+  max-width: 400px;
 }
 
 .header-title {
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .form {
@@ -153,33 +181,53 @@ let signIn = async () => {
   gap: 1rem;
 }
 
-label {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 0.5rem;
+.label {
+  margin-bottom: 0.5rem;
 }
 
-input {
+.password-wrapper {
+  position: relative;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
   width: 100%;
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: black;
+}
+
+.icon-eye,
+.icon-eye-off {
+  font-size: 1.25rem;
+  color: #ccc;
+}
+
+.icon-eye:hover,
+.icon-eye-off:hover {
+  color: white;
 }
 
 button {
-  display: block;
-  width: 220px;
-  height: 50px;
-  border: none;
-  outline: none;
-  color: #fff;
-  background: #28a745;
-  cursor: pointer;
-  position: relative;
-  z-index: 0;
-  border-radius: 4px;
   padding: 0.75rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
@@ -191,16 +239,32 @@ button:hover {
   text-align: center;
 }
 
-.sign-up-link {
-  display: block;
+.account-text {
   text-align: center;
   margin-top: 1rem;
-  color: #28a745;
-  cursor: pointer;
+  color: #f0f0f0;
 }
 
-.sign-up-link:hover {
+.account-text a {
+  color: #28a745;
+  text-decoration: none;
+}
+
+.account-text a:hover {
   text-decoration: underline;
+}
+
+.glow-on-hover {
+  width: 220px;
+  height: 50px;
+  border: none;
+  outline: none;
+  color: #fff;
+  background: #111;
+  cursor: pointer;
+  position: relative;
+  z-index: 0;
+  border-radius: 10px;
 }
 
 .glow-on-hover:before {
@@ -217,7 +281,7 @@ button:hover {
   animation: glowing 20s linear infinite;
   opacity: 0;
   transition: opacity .3s ease-in-out;
-  border-radius: 4px;
+  border-radius: 10px;
 }
 
 .glow-on-hover:active {
@@ -248,5 +312,9 @@ button:hover {
   0% { background-position: 0 0; }
   50% { background-position: 400% 0; }
   100% { background-position: 0 0; }
+}
+
+.c-white {
+  color: white;
 }
 </style>

@@ -16,7 +16,7 @@
         <form @submit.prevent="signUp">
           <div class="form">
             <!-- Email Input Field -->
-            <label class="label">Email
+            <label class="label" for="email">Email
               <input
                 type="email"
                 placeholder="example@gmail.com"
@@ -26,32 +26,42 @@
               />
             </label>
             <!-- Password Input Field -->
-            <label class="label">Password
+            <label class="label" for="password">Password
               <div class="password-wrapper">
                 <input
                   :type="passwordVisible ? 'text' : 'password'"
                   placeholder="**********"
                   id="password"
                   v-model="formState.password"
+                  aria-label="Password"
                   required
                 />
-                <span class="toggle-password" @click="togglePasswordVisibility">
+                <span 
+                  class="toggle-password"
+                  @click="togglePasswordVisibility"
+                  aria-label="Toggle password visibility"
+                >
                   <i :class="passwordVisible ? 'icon-eye' : 'icon-eye-off'"></i>
                 </span>
               </div>
             </label>
             <!-- Confirm Password Input Field -->
-            <label class="label">Confirm password
+            <label class="label" for="confirmPassword">Confirm Password
               <div class="password-wrapper">
                 <input
-                  :type="passwordVisible ? 'text' : 'password'"
+                  :type="confirmPasswordVisible ? 'text' : 'password'"
                   placeholder="**********"
                   id="confirmPassword"
                   v-model="formState.confirmPassword"
+                  aria-label="Confirm Password"
                   required
                 />
-                <span class="toggle-password" @click="togglePasswordVisibility">
-                  <i :class="passwordVisible ? 'icon-eye' : 'icon-eye-off'"></i>
+                <span 
+                  class="toggle-password"
+                  @click="toggleConfirmPasswordVisibility"
+                  aria-label="Toggle confirm password visibility"
+                >
+                  <i :class="confirmPasswordVisible ? 'icon-eye' : 'icon-eye-off'"></i>
                 </span>
               </div>
             </label>
@@ -63,6 +73,7 @@
                 v-model="formState.termsAccepted"
                 required
               />
+              <span class="custom-checkbox"></span>
               <span class="checkbox-label">
                 I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a>.
               </span>
@@ -77,9 +88,9 @@
           </div>
         </form>
         <!-- Display error message if any -->
-        <p v-show="formState.errorMsg" class="error-msg">{{ formState.errorMsg }}</p>
+        <p v-if="formState.errorMsg" class="error-msg">{{ formState.errorMsg }}</p>
         <!-- Display success message if registration is successful -->
-        <p v-show="formState.successMsg" class="success-msg">{{ formState.successMsg }}</p>
+        <p v-if="formState.successMsg" class="success-msg">{{ formState.successMsg }}</p>
       </div>
     </div>
   </div>
@@ -113,6 +124,7 @@ const userStore = useUserStore();
 const goToRoute = "/auth/login";
 const buttonText = "Sign In";
 const passwordVisible = ref(false);
+const confirmPasswordVisible = ref(false);
 
 // ------------------------------------------------------------------------
 // Function to toggle password visibility
@@ -120,6 +132,14 @@ const passwordVisible = ref(false);
 
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
+};
+
+// ------------------------------------------------------------------------
+// Function to toggle confirm password visibility
+// ------------------------------------------------------------------------
+
+const toggleConfirmPasswordVisibility = () => {
+  confirmPasswordVisible.value = !confirmPasswordVisible.value;
 };
 
 // ------------------------------------------------------------------------
@@ -165,6 +185,7 @@ const signUp = () => {
     }, 2000);
     return;
   }
+  
   // Validate password strength
   const passwordError = validatePassword(formState.password);
   if (passwordError) {
@@ -174,6 +195,7 @@ const signUp = () => {
     }, 5000);
     return;
   }
+  
   try {
     if (userStore.register(formState.email, formState.password)) {
       // Clear form and show success message
@@ -197,6 +219,31 @@ const signUp = () => {
 </script>
 
 <style scoped>
+.password-wrapper {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: black;
+  z-index: 1;
+}
+
+.icon-eye,
+.icon-eye-off {
+  font-size: 1.25rem;
+  color: #ccc;
+}
+
+.icon-eye:hover,
+.icon-eye-off:hover {
+  color: white;
+}
+
 .main-container {
   display: flex;
   justify-content: center;
@@ -211,6 +258,9 @@ const signUp = () => {
   padding: 2rem;
   width: 100%;
   max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .header {
@@ -227,12 +277,13 @@ const signUp = () => {
   list-style: none;
   padding: 0;
   display: flex;
-  justify-content: center; /* Center align the navigation links */
+  justify-content: center;
   gap: 1rem;
+  margin: 0;
 }
 
 .nav-links li {
-  margin: 0 0.5rem;
+  margin: 0;
 }
 
 .nav-links a {
@@ -250,6 +301,8 @@ const signUp = () => {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-top: 2rem;
+  width: 100%;
+  max-width: 400px; /* Adjust this width as needed */
 }
 
 .header-title {
@@ -277,11 +330,15 @@ const signUp = () => {
   position: relative;
 }
 
-input {
+input[type="text"],
+input[type="password"],
+input[type="email"] {
   width: 100%;
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  background-color: #2a2a2a;
+  color: #f0f0f0;
 }
 
 .toggle-password {
@@ -293,16 +350,15 @@ input {
   color: black;
 }
 
-.icon-eye::before {
-  content: '\f06e';
-  font-family: 'Font Awesome 5 Free';
-  font-weight: 900;
+.icon-eye,
+.icon-eye-off {
+  font-size: 1.25rem;
+  color: #ccc;
 }
 
-.icon-eye-off::before {
-  content: '\f070';
-  font-family: 'Font Awesome 5 Free';
-  font-weight: 900;
+.icon-eye:hover,
+.icon-eye-off:hover {
+  color: white;
 }
 
 button {
@@ -438,7 +494,7 @@ body {
 a {
   position: relative;
   text-decoration: none;
-  color: #28A745;
+  color: #28a745;
 }
 
 a:after {
@@ -448,7 +504,7 @@ a:after {
   position: absolute;
   left: 5%;
   right: 95%;
-  background: #28A745;
+  background: #28a745;
   transition: right 0.25s ease-in-out;
 }
 
@@ -527,7 +583,7 @@ a:hover:after {
 .action-container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center align the elements inside the action-container */
+  align-items: center;
   gap: 0.5rem;
   margin-top: 1rem;
 }
@@ -551,6 +607,39 @@ a:hover:after {
   align-items: center;
   gap: 0.5rem;
   margin-top: 1rem;
+}
+
+input[type="checkbox"] {
+  opacity: 0;
+  position: absolute;
+}
+
+.custom-checkbox {
+  width: 20px;
+  height: 20px;
+  background-color: #181818;
+  border-radius: 5px;
+  border: 2px solid #28a745;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.custom-checkbox:before {
+  content: '✔';
+  font-size: 14px;
+  color: transparent;
+  transition: color 0.3s ease;
+}
+
+input[type="checkbox"]:checked + .custom-checkbox {
+  background-color: #28a745;
+}
+
+input[type="checkbox"]:checked + .custom-checkbox:before {
+  color: white;
 }
 
 .checkbox-label {
