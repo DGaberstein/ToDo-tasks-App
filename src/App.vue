@@ -8,13 +8,13 @@
           </template>
           <template v-else>
             <!-- If the user is logged in, show these links -->
-            <RouterLink to="/">Home</RouterLink>
-            <RouterLink to="/about">About</RouterLink>
-            <RouterLink to="/all-tasks">All Tasks</RouterLink>
-            <RouterLink to="/completed-tasks">Completed Tasks</RouterLink>
-            <RouterLink to="/add-task">Add New Task</RouterLink>
-            <RouterLink to="/profile">Profile</RouterLink>
-            <button @click="handleSignOut">Sign Out</button>
+            <RouterLink to="/" class="nav-link">Home</RouterLink>
+            <RouterLink to="/about" class="nav-link">About</RouterLink>
+            <RouterLink to="/all-tasks" class="nav-link">All Tasks</RouterLink>
+            <RouterLink to="/completed-tasks" class="nav-link">Completed Tasks</RouterLink>
+            <RouterLink to="/add-task" class="nav-link">Add New Task</RouterLink>
+            <RouterLink to="/profile" class="nav-link">Profile</RouterLink>
+            <button @click="handleSignOut" class="sign-out-button">Sign Out</button>
           </template>
         </nav>
         <!-- Toggle button for dark mode -->
@@ -31,55 +31,26 @@
 </template>
 
 <script setup>
-
-// Import the HelloWorld component
+// Import the necessary components and functions
 import HelloWorld from "./components/HelloWorld.vue";
-// Import ref, onMounted, and onBeforeMount from Vue
 import { ref, onMounted } from "vue";
-// Import storeToRefs from Pinia to keep reactivity
 import { storeToRefs } from "pinia";
-// Import useRouter from vue-router for navigation
 import { useRouter } from "vue-router";
-// Import useUserStore to access user-related data and actions
 import { useUserStore } from "../src/stores/user";
-// App Layout / AppLayout
 import AppLayout from './components/AppLayout.vue';
 
-// ------------------------------------------------------------------------
-// Variable Definition Block
-// ------------------------------------------------------------------------
-
-// Router instance for navigation
+// Initialize router and store
 const router = useRouter();
-// Store user accessed easily here
 const userStore = useUserStore();
-// Destructure the variable 'user' and 'isLoggedIn' out of the store, keeping their reactivity using storeToRefs
 const { user, isLoggedIn } = storeToRefs(userStore);
-// Reactive variable to hide/show elements based on user login status
 const isUserloggedIn = ref(false);
 
-// Using the onMounted lifecycle hook to perform actions when the component is mounted
-// onMounted(() => {
-//   try {
-//     // Fetch the user data from the store on mount
-//     userStore.fetchUser();
-//   } catch (error) {
-//     console.error("Error fetching user data:", error.message);
-//   }
-// });
-
-// Using the onMounted lifecycle hook to perform actions when the component is mounted
 onMounted(() => {
-  console.log("hello calling function");
   try {
-    // Fetch the user data from the store
     userStore.fetchUser();
-    // Check if the user is stored in localStorage
     if (!user.value) {
-      // If no user is found, redirect to login page
       router.push({ path: "/auth/login" });
     } else {
-      // If user is found, update the reactive variable and redirect to home
       isUserloggedIn.value = true;
       router.push({ path: "/" });
     }
@@ -88,11 +59,7 @@ onMounted(() => {
   }
 });
 
-
-/**
- * Signs out the user and redirects to the login page.
- */
- const handleSignOut = () => {
+const handleSignOut = () => {
   try {
     userStore.signOut();
     router.push({ path: "/auth/login" });
@@ -100,25 +67,8 @@ onMounted(() => {
     console.error("Error signing out:", error);
   }
 };
-
-/*
-  The handleSignOut function is used to log out the current user.
-  - It calls the signOut function from the user store to clear user data.
-  - It redirects the user to the login page.
-*/
-
-// ------------------------------------------------------------------------
-// Additional Lifecycle Hooks (Placeholder for onBeforeMount, onUpdated)
-// ------------------------------------------------------------------------
-
-// Additional lifecycle hooks such as onBeforeMount and onUpdated can be added here if needed.
 </script>
 
-<!-- 
-What is storeToRefs?
-In order to extract properties from the store while keeping its reactivity, you need to use storeToRefs(). It will create refs for every reactive property. This is useful when you are only using state from the store but not calling any action. Note you can destructure actions directly from the store as they are bound to the store itself too.
-Link: https://pinia.vuejs.org/core-concepts/
--->
 <style>
 header {
   position: fixed;
@@ -139,15 +89,40 @@ header {
 
 nav {
   display: flex;
-  gap: 10px;
+  gap: 15px;
 }
 
-button {
-  margin-left: 10px;
+.nav-link {
+  color: #edf2f7; 
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-link:hover {
+  background-color: #4a5568; 
+  color: #e2e8f0; 
+}
+
+.sign-out-button {
+  background-color: #e53e3e;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.sign-out-button:hover {
+  background-color: #c53030;
+  transform: scale(1.05);
 }
 
 /* Ensure RouterView is not overlapping with the header */
 main {
-  padding-top: 60px;
+  padding-top: 70px;
 }
 </style>
