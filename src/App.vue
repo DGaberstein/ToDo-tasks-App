@@ -12,6 +12,7 @@
           <RouterLink to="/all-tasks">All Tasks</RouterLink>
           <RouterLink to="/completed-tasks">Completed Tasks</RouterLink>
           <RouterLink to="/add-task">Add New Task</RouterLink>
+          <RouterLink to="/profile">Profile</RouterLink>
           <button @click="handleSignOut">Sign Out</button>
         </template>
       </nav>
