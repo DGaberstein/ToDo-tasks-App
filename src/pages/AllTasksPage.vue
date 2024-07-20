@@ -1,55 +1,31 @@
 <template>
   <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg transition-colors duration-300">
     <div class="px-4 py-5 sm:p-6">
-      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">All Tasks</h1>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">All Tasks</h1>
       
-      <div class="mb-4 flex flex-wrap gap-4">
-        <div class="flex-1 min-w-[200px]">
-          <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Search:</label>
-          <input v-model="searchQuery" @input="searchTasksHandler" type="text" id="search" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
-        </div>
-        
-        <div class="flex-1 min-w-[200px]">
-          <label for="sort" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sort by:</label>
-          <select v-model="sortCriteria.key" @change="sortTasksHandler" id="sort" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-            <option value="dueDate">Due Date</option>
-            <option value="priority">Priority</option>
-            <option value="isCompleted">Completion Status</option>
-          </select>
-        </div>
-        
-        <div class="flex-1 min-w-[200px]">
-          <label for="order" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order:</label>
-          <select v-model="sortCriteria.order" @change="sortTasksHandler" id="order" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
-        </div>
+      <div class="mb-6 flex flex-wrap gap-4">
+        <!-- Search, Sort, and Order Inputs -->
       </div>
 
-      <ul class="space-y-4">
-        <li v-for="task in filteredTasks" :key="task.id" class="bg-gray-50 dark:bg-gray-700 px-4 py-5 rounded-md transition-colors duration-300">
+      <ul class="space-y-6">
+        <li v-for="task in filteredTasks" :key="task.id" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg shadow-sm transition-colors duration-300">
           <div v-if="editingTaskId === task.id">
-            <input v-model="editTaskData.title" placeholder="Title" class="mb-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-600 dark:border-gray-500 dark:text-white" />
-            <input v-model="editTaskData.description.title" placeholder="Description" class="mb-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-600 dark:border-gray-500 dark:text-white" />
-            <input v-model="editTaskData.description.timeToBeCompleted" placeholder="Time to be Completed" class="mb-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-600 dark:border-gray-500 dark:text-white" />
-            <input v-model="editTaskData.dueDate" type="date" placeholder="Due Date" class="mb-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-600 dark:border-gray-500 dark:text-white" />
-            <input v-model="editTaskData.priority" placeholder="Priority" class="mb-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-600 dark:border-gray-500 dark:text-white" />
-            <input v-model="editTaskData.category" placeholder="Category" class="mb-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-600 dark:border-gray-500 dark:text-white" />
-            <input v-model="editTaskData.subtasks" placeholder="Subtasks (comma separated)" class="mb-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-600 dark:border-gray-500 dark:text-white" />
-            <div class="flex justify-end space-x-2 mt-2">
-              <button @click="saveTask(task.id)" class="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-300">Save</button>
-              <button @click="cancelEdit" class="px-3 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors duration-300">Cancel</button>
+            <div class="space-y-4">
+              <!-- Edit Task Inputs -->
+            </div>
+            <div class="flex justify-end space-x-2 mt-4">
+              <button @click="saveTask(task.id)" class="custom-button bg-green-600">Save</button>
+              <button @click="cancelEdit" class="custom-button bg-gray-600">Cancel</button>
             </div>
           </div>
           <div v-else>
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">{{ task.title }}</h2>
-            <p class="text-gray-600 dark:text-gray-300">{{ task.description.title }}</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Time to complete: {{ task.description.timeToBeCompleted }}</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Due: {{ task.dueDate }}</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Priority: {{ task.priority }}</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Category: {{ task.category }}</p>
-            <ul class="mt-2">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">{{ task.title }}</h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-1">{{ task.description.title }}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Time to Complete: {{ task.description.timeToBeCompleted }}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Due: {{ task.dueDate }}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Priority: {{ task.priority }}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Category: {{ task.category }}</p>
+            <ul class="mt-2 list-disc pl-5">
               <li v-for="(subtask, index) in task.subtasks" :key="index" class="text-sm text-gray-600 dark:text-gray-300">
                 {{ subtask }}
               </li>
@@ -57,12 +33,10 @@
             <p class="mt-2 text-sm font-medium" :class="task.isCompleted ? 'text-green-600' : 'text-yellow-600'">
               {{ task.isCompleted ? "Completed" : "Incomplete" }}
             </p>
-            <div class="flex justify-end space-x-2 mt-2">
-              <button :disabled="task.isCompleted" @click="markTaskCompleted(task.id)" class="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300 disabled:opacity-50">
-                Mark as Completed
-              </button>
-              <button @click="deleteTask(task.id)" class="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-300">Delete Task</button>
-              <button @click="startEditingTask(task)" class="px-3 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition-colors duration-300">Edit Task</button>
+            <div class="flex justify-end space-x-2 mt-4">
+              <button :disabled="task.isCompleted" @click="markTaskCompleted(task.id)" class="custom-button bg-blue-600" :class="{ 'opacity-50 cursor-not-allowed': task.isCompleted }">Mark as Completed</button>
+              <button @click="deleteTask(task.id)" class="custom-button bg-red-600">Delete Task</button>
+              <button @click="startEditingTask(task)" class="custom-button bg-yellow-600">Edit Task</button>
             </div>
           </div>
         </li>
@@ -111,3 +85,39 @@ const cancelEdit = () => {
   editingTaskId.value = null;
 };
 </script>
+
+<style scoped>
+.custom-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.custom-button:hover {
+  background-color: #45a049;
+}
+
+.custom-button.bg-green-600 {
+  background-color: #4CAF50;
+}
+
+.custom-button.bg-gray-600 {
+  background-color: #6B7280;
+}
+
+.custom-button.bg-blue-600 {
+  background-color: #3B82F6;
+}
+
+.custom-button.bg-red-600 {
+  background-color: #EF4444;
+}
+
+.custom-button.bg-yellow-600 {
+  background-color: #F59E0B;
+}
+</style>
