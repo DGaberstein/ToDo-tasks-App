@@ -1,19 +1,21 @@
 <template>
-  <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg transition-colors duration-300">
-    <div class="px-4 py-5 sm:p-6">
-      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Completed Tasks</h1>
-      <ul class="space-y-4">
-        <li v-for="task in completedTasks" :key="task.id" class="bg-gray-50 dark:bg-gray-700 px-4 py-5 rounded-md transition-colors duration-300">
-          <h2 class="text-xl font-semibold text-gray-900 dark:text-white">{{ task.title }}</h2>
-          <p class="text-gray-600 dark:text-gray-300">{{ task.description.title }}</p>
-          <p class="text-sm text-gray-500 dark:text-gray-400">Time to complete: {{ task.description.timeToBeCompleted }}</p>
-          <ul class="mt-2">
-            <li v-for="(extraInfo, index) in task.description.extraInfoRequired" :key="index" class="text-sm text-gray-600 dark:text-gray-300">
-              {{ extraInfo }}
-            </li>
-          </ul>
-        </li>
-      </ul>
+  <div class="bg-gradient-to-br from-purple-600 to-indigo-700 min-h-screen p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+      <div class="p-8">
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-6">Completed Tasks</h1>
+        <ul class="space-y-4">
+          <li v-for="task in completedTasks" :key="task.id" class="bg-gradient-to-r from-green-400 to-blue-500 rounded-xl p-6 text-white transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1">
+            <h2 class="text-2xl font-bold mb-2">{{ task.title }}</h2>
+            <p class="text-lg mb-2">{{ task.description.title }}</p>
+            <p class="text-sm mb-2">Time to complete: {{ task.description.timeToBeCompleted }}</p>
+            <ul class="list-disc list-inside">
+              <li v-for="(extraInfo, index) in task.description.extraInfoRequired" :key="index" class="text-sm">
+                {{ extraInfo }}
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>

@@ -4,22 +4,24 @@ It demonstrates how to consume and display data from a Pinia store, and how to c
 -->
 
 <template>
-  <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg transition-colors duration-300">
-    <div class="px-4 py-5 sm:p-6">
-      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Welcome to Your Task Manager</h1>
-      <div class="space-y-4">
-        <div class="bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 rounded-md transition-colors duration-300">
-          <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Current Count</dt>
-          <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">{{ countNumber }}</dd>
+  <div class="bg-gradient-to-br from-purple-600 to-indigo-700 min-h-screen p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+      <div class="p-8">
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-6">Welcome to Your Task Manager</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div class="bg-gradient-to-r from-pink-500 to-purple-500 rounded-xl p-6 text-white">
+            <h2 class="text-2xl font-bold mb-2">Current Count</h2>
+            <p class="text-4xl font-extrabold">{{ countNumber }}</p>
+          </div>
+          <div class="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl p-6 text-white">
+            <h2 class="text-2xl font-bold mb-2">Double Count</h2>
+            <p class="text-4xl font-extrabold">{{ doubleCountNumber }}</p>
+          </div>
         </div>
-        <div class="bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 rounded-md transition-colors duration-300">
-          <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Double Count</dt>
-          <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">{{ doubleCountNumber }}</dd>
-        </div>
+        <button @click="incrementNumberFunctionFromStore" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold tracking-wide hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+          Increment Count
+        </button>
       </div>
-      <button @click="incrementNumberFunctionFromStore" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300">
-        Increment Count
-      </button>
     </div>
   </div>
 </template>
