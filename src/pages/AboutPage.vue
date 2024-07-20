@@ -10,7 +10,7 @@
           <h2 class="text-2xl font-bold mb-2">Current Count</h2>
           <p class="text-4xl font-extrabold">{{ countStore.count }}</p>
         </div>
-        <button @click="incrementNumberFunctionFromStore" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold tracking-wide hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+        <button @click="incrementNumberFunctionFromStore" class="custom-button bg-indigo-600">
           Increment Count
         </button>
       </div>
@@ -19,15 +19,34 @@
 </template>
 
 <script setup>
-//import { computed } from "vue";
 import { useCounterStore } from "../stores/counter";
-// 2nd wa
-// A bit easier because we can store the access of the store inside a variable which we then reference easier (take a look at the example with the vaar name 'countNumber')
-let countStore = useCounterStore();
 
-// -----
-// -----
-// Consuming a piece of state that happens to be a function
-// How do we do it ?
-let incrementNumberFunctionFromStore = countStore.increment;
+const countStore = useCounterStore();
+const incrementNumberFunctionFromStore = countStore.increment;
 </script>
+
+<style scoped>
+.custom-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.custom-button:hover {
+  background-color: #45a049;
+  transform: translateY(-0.5rem);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-button.bg-indigo-600 {
+  background-color: #4F46E5;
+}
+
+.custom-button.bg-indigo-600:hover {
+  background-color: #4338CA;
+}
+</style>

@@ -146,16 +146,34 @@ const startNewTask = () => {
 
 <style scoped>
 .custom-button {
-  background-color: #4CAF50;
+  background-color: #4CAF50; /* Default background color */
   color: white;
   padding: 10px 15px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .custom-button:hover {
   background-color: #45a049;
+  transform: translateY(-0.5rem);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-button.bg-green-600 {
+  background-color: #4CAF50;
+}
+
+.custom-button.bg-green-600:hover {
+  background-color: #45a049;
+}
+
+.custom-button.bg-indigo-600 {
+  background-color: #4F46E5;
+}
+
+.custom-button.bg-indigo-600:hover {
+  background-color: #4338CA;
 }
 </style>

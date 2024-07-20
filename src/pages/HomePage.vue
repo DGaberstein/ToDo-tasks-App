@@ -1,8 +1,3 @@
-<!-- 
-This file defines the Home View component of a Vue.js application.
-It demonstrates how to consume and display data from a Pinia store, and how to call store functions.
--->
-
 <template>
   <div class="bg-gradient-to-br from-purple-600 to-indigo-700 min-h-screen p-8">
     <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -18,7 +13,7 @@ It demonstrates how to consume and display data from a Pinia store, and how to c
             <p class="text-4xl font-extrabold">{{ doubleCountNumber }}</p>
           </div>
         </div>
-        <button @click="incrementNumberFunctionFromStore" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold tracking-wide hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+        <button @click="incrementNumberFunctionFromStore" class="custom-button bg-indigo-600 hover:bg-indigo-700">
           Increment Count
         </button>
       </div>
@@ -43,33 +38,53 @@ import { storeToRefs } from "pinia";
 // ------------------------------------------------------------------------
 
 // Access the counter store and store it in a variable for easier reference
-let countStore = useCounterStore();
+const countStore = useCounterStore();
 
 // ------------------------------------------------------------------------
 // Computed Properties Block
 // ------------------------------------------------------------------------
 
 // Store the 'count' variable from the store in a computed property for real-time updates
-let countNumber = computed(() => countStore.count);
+const countNumber = computed(() => countStore.count);
 
 // Store the 'doubleCount' variable from the store
-let doubleCountNumber = countStore.doubleCount;
+const doubleCountNumber = computed(() => countStore.doubleCount);
 
 // ------------------------------------------------------------------------
 // Methods Block
 // ------------------------------------------------------------------------
 
 // Access the 'increment' function from the store to be used in the template
-let incrementNumberFunctionFromStore = countStore.increment;
+const incrementNumberFunctionFromStore = countStore.increment;
 
 const userStore = useUserStore();
 const { getTasksForUser } = storeToRefs(userStore);
 
 console.log(userStore.getTasksForUser());
-
-/*
-  The incrementNumberFunctionFromStore is used to increment the count in the store.
-  - It accesses the increment function from the counter store.
-  - This function is called when the button in the template is clicked.
-  */
 </script>
+
+<style scoped>
+.custom-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.custom-button:hover {
+  background-color: #45a049;
+  transform: translateY(-0.5rem);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-button.bg-indigo-600 {
+  background-color: #4F46E5;
+}
+
+.custom-button.bg-indigo-600:hover {
+  background-color: #4338CA;
+}
+</style>
