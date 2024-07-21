@@ -2,7 +2,7 @@
   <div class="bg-gradient-to-br from-purple-600 to-indigo-700 min-h-screen p-8">
     <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
       <div class="p-8">
-        <h1 class="text-4xl font-extrabold text-gray-900 mb-6">Welcome to Your Task Manager</h1>
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-6">Welcome to the Task Manager</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div class="bg-gradient-to-r from-pink-500 to-purple-500 rounded-xl p-6 text-white">
             <h2 class="text-2xl font-bold mb-2">Current Count</h2>
