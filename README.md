@@ -2,6 +2,8 @@
 
 This is a Vue.js-based ToDo application that utilizes Pinia for state management and Vue Router for navigation. The application allows users to manage their tasks, including adding new tasks, viewing all tasks, marking tasks as completed, and deleting tasks. Users can also register and log in to the application.
 
+Here is the Website [Deploy Link](https://to-task-app-dg.netlify.app)
+
 ## Table of Contents
 
 - [ToDo Application](#todo-application)
